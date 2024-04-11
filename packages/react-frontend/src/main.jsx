@@ -1,10 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+// src/main.jsx
+import React from "react";
+import ReactDOMClient from "react-dom/client";
+import MyApp from "./MyApp";
+import "./main.css";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+//React functional components must return an element to be rendered on the page.
+
+const container = document.getElementById("root");
+
+// Create a root
+const root = ReactDOMClient.createRoot(container);
+
+// Initial render:
+root.render(<MyApp />);
