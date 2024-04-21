@@ -1,5 +1,6 @@
 // Import necessary modules
 import express from "express";
+import cors from "cors";
 
 // Create Express app and define port
 const app = express();
@@ -36,6 +37,7 @@ const users = {
     ]
 };
 
+app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
@@ -59,6 +61,29 @@ app.get("/users/:id", (req, res) => {
     } else {
         res.send(result);
     }
+});
+
+//keep this
+app.get("/users", (req, res) => {  
+    const name = req.query.name;  
+    const job = req.query.job;   
+    
+    if(name && job)  
+    {   
+        let result = findUserByNameAndJob(name, job);   
+        result = { users_list: result };   
+        res.send(result);  
+    }  
+    else if(name)  
+    {   
+        let result = findUserByName(name);   
+        result = { users_list: result };   
+        res.send(result);  
+    }  
+    else  
+    {   
+        res.send(users);  
+    } 
 });
 
 // Endpoint to add a new user
