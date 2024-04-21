@@ -41,6 +41,11 @@ app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
+// Function to generate a random ID
+const generateRandomId = () => {
+    return Math.random().toString(36).substr(2, 9);
+};
+
 // Function to find a user by their name
 const findUserByName = (name) => {
     return users["users_list"].filter(
@@ -63,7 +68,7 @@ app.get("/users/:id", (req, res) => {
     }
 });
 
-//keep this
+// Endpoint to retrieve users
 app.get("/users", (req, res) => {  
     const name = req.query.name;  
     const job = req.query.job;   
@@ -89,8 +94,9 @@ app.get("/users", (req, res) => {
 // Endpoint to add a new user
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    userToAdd.id = generateRandomId(); // Assign random ID
+    const addedUser = addUser(userToAdd);
+    res.status(201).send(addedUser);
 });
 
 // Function to add a user to the list
@@ -100,15 +106,18 @@ const addUser = (user) => {
 };
 
 // Endpoint to delete a user by their ID
-app.delete("/users/:id", (req, res) => {
-    const id = req.params["id"];
-    const index = users["users_list"].findIndex(user => user.id === id);
-    if (index !== -1) {
-        users["users_list"].splice(index, 1);
-        res.status(204).send(); // No content response
-    } else {
-        res.status(404).send("Resource not found.");
-    }
+app.delete("/users/:id", (req, res) => {  
+    const id = req.params["id"];  
+    const deletedUser = deleteUser(id);  
+
+    if(deletedUser === undefined)  
+    {   
+        res.status(404).send(`User with ID ${id} could not be found`);  
+    }  
+    else  
+    {   
+        res.send(users);  
+    } 
 });
 
 // Start the server
