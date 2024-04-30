@@ -1,5 +1,4 @@
-// src/MyApp.jsx
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from "./Table";
 import Form from "./Form";
 
@@ -14,7 +13,7 @@ function MyApp() {
     .then((response) => {
       if (response.status === 204) {
         // If successful deletion, update frontend state
-        setCharacters(characters.filter((character) => character.id !== id));
+        setCharacters(characters.filter((character) => character._id !== id)); // Change 'id' to '_id'
       } else if (response.status === 404) {
         // If user not found, show error message or handle it appropriately
         console.log("User not found.");
@@ -27,8 +26,6 @@ function MyApp() {
       console.log(error);
     });
   }
-  
-
 
   function updateList(person) { 
     postUser(person)
@@ -47,32 +44,29 @@ function MyApp() {
       });
   }
   
-  
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");
     return promise;
-}
+  }
 
-useEffect(() => {
-  fetchUsers()
-	  .then((res) => res.json())
-	  .then((json) => setCharacters(json["users_list"]))
-	  .catch((error) => { console.log(error); });
-}, [] );
+  useEffect(() => {
+    fetchUsers()
+      .then((res) => res.json())
+      .then((json) => setCharacters(json["users_list"]))
+      .catch((error) => { console.log(error); });
+  }, [] );
 
+  function postUser(person) {
+    const promise = fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(person),
+    });
 
-function postUser(person) {
-  const promise = fetch("Http://localhost:8000/users", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(person),
-  });
-
-  return promise;
-}
-
+    return promise;
+  }
 
   return (
     <div className="container">
@@ -85,5 +79,4 @@ function postUser(person) {
   );
 }
 
-//It makes the component available to be imported into other components or files
 export default MyApp;
