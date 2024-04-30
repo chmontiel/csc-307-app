@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import User from "./users.js"; // Import the User model
+import User from "./models/users.js"; // Import the User model
 
 const app = express();
 const port = 8000;
